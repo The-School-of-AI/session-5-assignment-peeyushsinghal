@@ -25,14 +25,21 @@ def test_session5_readme_exists():
         B. Once you write this test, it needs to print the filures_message for failing this test.
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    assert os.path.isfile("README.md"), "README.md file missing!"
+
+
 
 def test_session5_readme_500_words():
     """ A. failures_message: Make your README.md file interesting! Add atleast 500 words
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    readme = open("README.md", "r")
+    readme_words = readme.read().split()
+    readme.close()
+    assert len(readme_words) >= 500, "Make your README.md file interesting! Add atleast 500 words"
 
 
 def test_session5_readme_proper_description():
@@ -40,7 +47,16 @@ def test_session5_readme_proper_description():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    READMELOOKSGOOD = True
+    f = open("README.md", "r", encoding="utf-8")
+    content = f.read()
+    f.close()
+    for c in README_CONTENT_CHECK_FOR:
+        if c not in content:
+            READMELOOKSGOOD = False
+            pass
+    assert READMELOOKSGOOD == True, "You have not described all the functions/class well in your README.md file"
 
 
 def test_session5_readme_file_for_more_than_10_hashes():
@@ -49,7 +65,11 @@ def test_session5_readme_file_for_more_than_10_hashes():
         it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    f = open("README.md", "r", encoding="utf-8")
+    content = f.read()
+    f.close()
+    assert content.count("#") >= 10
 
 
 def test_session5_indentations():
@@ -60,7 +80,13 @@ def test_session5_indentations():
         B. Once you write this test, it needs to print the failures_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+
+    lines = inspect.getsource(session5)
+    spaces = re.findall('\n +.', lines)
+    for space in spaces:
+        assert len(space) % 4 == 2, "Your script contains misplaced indentations"
+        assert len(re.sub(r'[^ ]', '', space)) % 4 == 0, "Your code indentation does not follow PEP8 guidelines"
 
 
 def test_session5_function_name_had_cap_letter():
@@ -69,7 +95,10 @@ def test_session5_function_name_had_cap_letter():
         it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    functions = inspect.getmembers(session5, inspect.isfunction)
+    for function in functions:
+        assert len(re.findall('([A-Z])', function[0])) == 0, "You have used Capital letter(s) in your function names"
 
 
 ############################## Assignment Validations###########################
@@ -80,7 +109,20 @@ def test_session5_time_it_print():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    repetitions = 5 
+    try:
+        time_time_it = session5.time_it( print, 1, 2, 3, repetitions=repetitions, sep='-', end= ' ***\n' )
+    except Exception as e:
+        raise RuntimeError("time_it can't time print function")
+
+    start_time_fn = time.time()
+    for _ in range(repetitions):
+        print(1, 2, 3, sep='-', end= ' ***\n')
+    end_time_fn = time.time()
+    time_fn = end_time_fn-start_time_fn
+
+    assert math.isclose(time_time_it, time_fn, abs_tol=0.01), "time_it can't time print function"
 
 
 def test_session5_time_it_squared_power_list():
@@ -89,7 +131,27 @@ def test_session5_time_it_squared_power_list():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    repetitions = 5 
+    try:
+        time_time_it = session5.time_it( squared_power_list, 2, repetitions=5, start=0, end=5 )
+    except Exception as e:
+        print(e)
+        raise RuntimeError("time_it can't time squared_power_list function")
+
+    start_time_fn = time.time()
+    for _ in range(repetitions):
+        list_squared_power =[]
+        start = 0
+        end = 5
+        while start <= end:
+            list_squared_power.append(math.pow(2,start))
+            start+=1
+    end_time_fn = time.time()
+    time_fn = end_time_fn-start_time_fn
+
+    assert math.isclose(time_time_it, time_fn, abs_tol=0.01), "time_it can't time squared_power_list function"
+
 
 
 def test_session5_time_it_polygon_area():
@@ -98,7 +160,25 @@ def test_session5_time_it_polygon_area():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+
+    repetitions = 5 
+    try:
+        time_time_it = session5.time_it( polygon_area, 3, repetitions=5, sides = 4)
+    except Exception as e:
+        print(e)
+        raise RuntimeError("time_it can't time polygon_area function")
+
+    start_time_fn = time.time()
+    for _ in range(repetitions):
+        length = 3
+        sides = 4
+        area = (sides*length**2)/(4*math.tan(math.pi/sides))
+    end_time_fn = time.time()
+    time_fn = end_time_fn-start_time_fn
+
+    assert math.isclose(time_time_it, time_fn, abs_tol=0.01), "time_it can't time squared_power_list function"
+
 
 
 def test_session5_time_it_temp_converter():
@@ -107,7 +187,24 @@ def test_session5_time_it_temp_converter():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+
+    repetitions = 5 
+    try:
+        time_time_it = session5.time_it( temp_converter, 32, repetitions=5, temp_given_in = 'f')
+    except Exception as e:
+        print(e)
+        raise RuntimeError("time_it can't time temp_converter function")
+
+    start_time_fn = time.time()
+    for _ in range(repetitions):
+        temp  = 32
+        temp_given_in = 'f'
+        temp_converted = (temp*5/9)+32
+    end_time_fn = time.time()
+    time_fn = end_time_fn-start_time_fn
+
+    assert math.isclose(time_time_it, time_fn, abs_tol=0.01), "time_it can't time squared_power_list function"
 
 
 def test_session5_time_it_speed_converter():
@@ -116,8 +213,24 @@ def test_session5_time_it_speed_converter():
         B. Once you write this test, it needs to print the failure_message
         C. Delete lines A, B and C, write proper function description after writing this test successfully. 
     """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    repetitions = 5 
+    try:
+        time_time_it = session5.time_it( speed_converter, 36, repetitions=5, dist='km', time='min')
+    except Exception as e:
+        print(e)
+        raise RuntimeError("time_it can't time speed_converter function")
 
+    start_time_fn = time.time()
+    for _ in range(repetitions):
+        dist='km'
+        time_d='min'
+        speed = 36
+        speed_converted = speed / 60
+    end_time_fn = time.time()
+    time_fn = end_time_fn-start_time_fn
+
+    assert math.isclose(time_time_it, time_fn, abs_tol=0.1), "time_it can't time speed_converter function"
 
 
 ####################### Validations for time_it#################################
@@ -201,23 +314,46 @@ def test_session5_squared_power_list_output():
 ####################### Validations for polygon_area()####################
 def test_session5_polygon_area():
     """Test polygon_area function for no mandatory positional arguments"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError,match=r".*required positional argument: 'length'*"):
+        session5.polygon_area()
 
 def test_session5_polygon_area_length():
     """Test polygon_area function for incorrect values for positional argument length (check for string AND imaginary input)"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*incorrect values for positional argument length*"):
+        session5.polygon_area("one")
+    with pytest.raises(ValueError, match=r".*incorrect values for positional argument length*"):
+        session5.polygon_area(1+2j)
+
+
 
 def test_session5_polygon_area_sides():
     """Test polygon_area function for incorrect value to sides keyword argument (string "ten" AND img input)"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError, match=r".*Integer expected for sides*"):
+        session5.polygon_area(5,sides=1+2j)
+    with pytest.raises(TypeError, match=r".*Integer expected for sides*"):
+        session5.polygon_area(5,sides='ten')
 
 def test_session5_polygon_area_sides_values():
     """Test polygon_area function for permissible values for sides, check for 0, 1, 2, 7"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*Value of sides should be 3, 4, 5 or 6 only*"):
+        session5.polygon_area(5,sides=0)
+    with pytest.raises(ValueError, match=r".*Value of sides should be 3, 4, 5 or 6 only*"):
+        session5.polygon_area(5,sides=1)
+    with pytest.raises(ValueError, match=r".*Value of sides should be 3, 4, 5 or 6 only*"):
+        session5.polygon_area(5,sides=2)
+    with pytest.raises(ValueError, match=r".*Value of sides should be 3, 4, 5 or 6 only*"):
+        session5.polygon_area(5,sides=7)
+
 
 def test_session5_polygon_area_length_values():
     """Test polygon_area function for permissible values for sides (len > 0)"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*Permissible values for len > 0*"):
+        session5.polygon_area(-4,sides=4)
 
 def test_session5_polygon_area_unwanted_args():
     """DON'T TOUCH THIS FUNCTION \
@@ -250,11 +386,17 @@ def test_session5_polygon_area_output():
 
 def test_session5_temp_converter():
     """Test temp_converter function for no mandatory positional arguments"""
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(TypeError, match=r".*required positional argument: 'temp'*"):
+        session5.temp_converter()
 
 def test_session5_temp_converter_temp():
     """Test temp_converter function for incorrect values for positional argument temp (check for string AND imaginary input) """
-    assert True == False, "You need to write this test!"
+    # assert True == False, "You need to write this test!"
+    with pytest.raises(ValueError, match=r".*incorrect values for positional argument temp*"):
+        session5.temp_converter("one")
+    with pytest.raises(ValueError, match=r".*incorrect values for positional argument temp*"):
+        session5.temp_converter(1+2j)
 
 
 def test_session5_temp_converter_temp_given_in():
